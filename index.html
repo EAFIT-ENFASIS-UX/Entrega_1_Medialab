@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>i-Homotic — UX Research · Entrega 1</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700&family=Playfair+Display:ital,wght@0,700;1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-dark: #2D6A2E; --green-light: #4CAF50; --green-pale: #E8F5E9;
+    --orange: #E8721A; --dark: #1B2A1B;
+    --gray-900: #212121; --gray-700: #424242; --gray-500: #757575;
+    --gray-300: #E0E0E0; --gray-100: #F5F5F5; --white: #FFFFFF;
+    --accent: #1B5E20; --accent2: #E65100;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--gray-100); color: var(--gray-900); min-height: 100vh; }
+
+  /* ── HEADER ── */
+  .header {
+    background: linear-gradient(135deg, var(--dark) 0%, var(--green-dark) 100%);
+    padding: 24px 36px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+  }
+  .header-left { display: flex; align-items: center; gap: 18px; }
+  .logo-mark {
+    width: 46px; height: 46px; background: var(--green-light); border-radius: 11px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 20px; color: var(--white); position: relative; flex-shrink: 0;
+  }
+  .logo-mark::after { content: ''; position: absolute; top: -4px; right: -4px; width: 13px; height: 13px; background: var(--orange); border-radius: 50%; }
+  .header-title { color: var(--white); font-size: 21px; font-weight: 700; }
+  .header-title span { color: var(--orange); }
+  .header-subtitle { color: rgba(255,255,255,0.6); font-size: 12.5px; margin-top: 2px; }
+  .header-badge { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 7px 16px; color: rgba(255,255,255,0.8); font-size: 12px; }
+  .hamburger-btn {
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 8px; width: 40px; height: 40px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: white; font-size: 20px; line-height: 1;
+    transition: background 0.2s; flex-shrink: 0;
+  }
+  .hamburger-btn:hover { background: rgba(255,255,255,0.2); }
+
+  /* ── SIDEBAR NAV ── */
+  .nav-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+    z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+  }
+  .nav-overlay.open { opacity: 1; pointer-events: all; }
+  .nav-sidebar {
+    position: fixed; top: 0; left: 0; height: 100vh; width: 280px;
+    background: #fff; z-index: 101;
+    transform: translateX(-100%); transition: transform 0.3s ease;
+    display: flex; flex-direction: column;
+    box-shadow: 4px 0 24px rgba(0,0,0,0.15);
+  }
+  .nav-sidebar.open { transform: translateX(0); }
+  .nav-sidebar-header {
+    background: linear-gradient(135deg, #1B2A1B 0%, #2D6A2E 100%);
+    padding: 20px; display: flex; align-items: center; gap: 14px; flex-shrink: 0;
+  }
+  .nav-sidebar .logo-mark { flex-shrink: 0; }
+  .nav-brand { color: #fff; font-weight: 700; font-size: 16px; }
+  .nav-brand span { color: #E8721A; }
+  .nav-brand-sub { color: rgba(255,255,255,0.55); font-size: 11px; margin-top: 2px; }
+  .nav-close {
+    margin-left: auto; background: rgba(255,255,255,0.1);
+    border: none; color: white; border-radius: 8px;
+    width: 34px; height: 34px; cursor: pointer; font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s; flex-shrink: 0;
+  }
+  .nav-close:hover { background: rgba(255,255,255,0.25); }
+  .nav-links { padding: 16px 12px; flex: 1; overflow-y: auto; }
+  .nav-section-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #9E9E9E; padding: 8px 12px 6px; }
+  .nav-link {
+    display: flex; align-items: center; gap: 12px;
+    padding: 11px 14px; border-radius: 10px; text-decoration: none;
+    color: #424242; font-size: 14px; font-weight: 500;
+    transition: background 0.15s, color 0.15s; margin-bottom: 2px;
+    border-left: 3px solid transparent;
+  }
+  .nav-link:hover { background: #E8F5E9; color: #2D6A2E; }
+  .nav-link.active { background: #E8F5E9; color: #1B5E20; font-weight: 700; border-left-color: #4CAF50; }
+  .nav-icon { font-size: 18px; width: 26px; text-align: center; flex-shrink: 0; }
+  .nav-footer { padding: 16px 20px; border-top: 1px solid #E0E0E0; flex-shrink: 0; }
+  .nav-footer-text { font-size: 11px; color: #9E9E9E; line-height: 1.6; }
+  .nav-footer-text strong { color: #616161; }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, var(--dark) 0%, var(--green-dark) 50%, var(--green-light) 100%);
+    padding: 72px 48px; color: var(--white); position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 50%;
+    background: radial-gradient(circle at 80% 50%, rgba(232,114,26,0.18), transparent 60%);
+  }
+  .hero-content { max-width: 720px; position: relative; z-index: 1; }
+  .hero-tag {
+    display: inline-block; padding: 5px 14px; border-radius: 20px; margin-bottom: 20px;
+    background: rgba(255,255,255,0.12); font-size: 12px; font-weight: 700;
+    letter-spacing: 0.8px; text-transform: uppercase; color: rgba(255,255,255,0.85);
+  }
+  .hero-title { font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 700; line-height: 1.15; margin-bottom: 18px; }
+  .hero-title em { color: var(--orange); font-style: normal; }
+  .hero-desc { font-size: 17px; color: rgba(255,255,255,0.8); line-height: 1.75; max-width: 580px; margin-bottom: 36px; }
+  .hero-stats { display: flex; gap: 36px; flex-wrap: wrap; }
+  .hero-stat strong { display: block; font-size: 30px; font-weight: 700; color: var(--orange); line-height: 1; }
+  .hero-stat span { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 4px; display: block; }
+
+  /* ── CONTENT ── */
+  .content-area { max-width: 1100px; margin: 0 auto; padding: 48px 24px 64px; }
+
+  /* ── CONTEXT STRIP ── */
+  .context-strip {
+    background: var(--white); border-radius: 16px; padding: 28px 32px; margin-bottom: 36px;
+    border: 1px solid var(--gray-300); border-left: 5px solid var(--orange);
+    display: flex; gap: 32px; flex-wrap: wrap; align-items: center;
+  }
+  .context-strip-text { flex: 1; min-width: 260px; }
+  .context-strip-text h3 { font-size: 13px; font-weight: 700; color: var(--orange); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .context-strip-text p { font-size: 14px; color: var(--gray-700); line-height: 1.65; }
+  .context-strip-badges { display: flex; gap: 12px; flex-wrap: wrap; flex-shrink: 0; }
+  .context-badge {
+    padding: 10px 18px; border-radius: 12px; font-size: 12px; font-weight: 600;
+    text-align: center; min-width: 68px;
+  }
+  .context-badge strong { display: block; font-size: 22px; font-weight: 700; line-height: 1.1; margin-bottom: 2px; }
+
+  /* ── SECTION HEADER ── */
+  .section-header { margin-bottom: 24px; }
+  .section-header h2 { font-size: 22px; font-weight: 700; color: var(--gray-900); }
+  .section-header p { font-size: 14px; color: var(--gray-500); margin-top: 6px; }
+
+  /* ── DELIVERABLES GRID ── */
+  .deliverables-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .deliverable-card {
+    background: var(--white); border-radius: 18px; overflow: hidden;
+    border: 1px solid var(--gray-300); transition: transform 0.2s, box-shadow 0.2s;
+    display: flex; flex-direction: column;
+  }
+  .deliverable-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.1); }
+  .card-top { padding: 28px 28px 20px; flex: 1; }
+  .card-icon {
+    width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center;
+    justify-content: center; font-size: 26px; margin-bottom: 16px;
+  }
+  .card-number { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+  .card-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--gray-900); margin-bottom: 10px; line-height: 1.25; }
+  .card-desc { font-size: 14px; color: var(--gray-700); line-height: 1.65; }
+  .card-tags { display: flex; gap: 7px; flex-wrap: wrap; padding: 0 28px 20px; }
+  .card-tag { font-size: 11px; padding: 4px 11px; border-radius: 10px; font-weight: 600; }
+  .card-footer {
+    padding: 16px 28px 24px; border-top: 1px solid var(--gray-300);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .card-meta { font-size: 12px; color: var(--gray-500); }
+  .card-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 20px; border-radius: 10px; text-decoration: none;
+    font-size: 14px; font-weight: 600; transition: opacity 0.2s, transform 0.15s;
+  }
+  .card-btn:hover { opacity: 0.88; transform: translateX(3px); }
+  .card-btn .arrow { font-size: 16px; }
+
+  /* Color variants */
+  .card-green .card-icon { background: #E8F5E9; }
+  .card-green .card-number { color: #4CAF50; }
+  .card-green .card-tag { background: #E8F5E9; color: #2D6A2E; }
+  .card-green .card-btn { background: #2D6A2E; color: white; }
+
+  .card-orange .card-icon { background: #FFF3E0; }
+  .card-orange .card-number { color: var(--orange); }
+  .card-orange .card-tag { background: #FFF3E0; color: #E65100; }
+  .card-orange .card-btn { background: var(--orange); color: white; }
+
+  .card-teal .card-icon { background: #E0F2F1; }
+  .card-teal .card-number { color: #00897B; }
+  .card-teal .card-tag { background: #E0F2F1; color: #00695C; }
+  .card-teal .card-btn { background: #00796B; color: white; }
+
+  .card-purple .card-icon { background: #EDE7F6; }
+  .card-purple .card-number { color: #7E57C2; }
+  .card-purple .card-tag { background: #EDE7F6; color: #4527A0; }
+  .card-purple .card-btn { background: #512DA8; color: white; }
+
+  @media (max-width: 720px) {
+    .deliverables-grid { grid-template-columns: 1fr; }
+    .hero { padding: 40px 24px; }
+    .hero-title { font-size: 32px; }
+    .hero-stats { gap: 20px; }
+    .context-strip { flex-direction: column; gap: 20px; }
+    .header { padding: 16px 20px; }
+    .content-area { padding: 32px 16px 48px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Overlay + Sidebar -->
+<button class="back-to-top" id="backToTop" aria-label="Volver al inicio" title="Volver arriba">↑</button>
+
+<div class="nav-overlay" id="navOverlay" onclick="closeSidebar()"></div>
+<aside class="nav-sidebar" id="navSidebar">
+  <div class="nav-sidebar-header">
+    <div class="logo-mark">iH</div>
+    <div>
+      <div class="nav-brand">i-Homotic<span> ·</span></div>
+      <div class="nav-brand-sub">UX Research · EAFIT 2026</div>
+    </div>
+    <button class="nav-close" onclick="closeSidebar()">✕</button>
+  </div>
+  <div class="nav-links">
+    <div class="nav-section-label">Navegación</div>
+    <a href="index.html" class="nav-link active"><span class="nav-icon">🏠</span> Inicio</a>
+    <a href="user_persona.html" class="nav-link"><span class="nav-icon">👤</span> User Persona</a>
+    <a href="arquetipo_unificado.html" class="nav-link"><span class="nav-icon">🧩</span> Arquetipo Unificado</a>
+    <a href="comportamiento_generacional.html" class="nav-link"><span class="nav-icon">📊</span> Comportamiento Generacional</a>
+    <a href="mapa_empatia.html" class="nav-link"><span class="nav-icon">🗺️</span> Mapa de Empatía</a>
+  </div>
+  <div class="nav-footer">
+    <div class="nav-footer-text"><strong>i-Homotic UX Research</strong><br>Entrega 1 · Medialab · EAFIT 2026</div>
+  </div>
+</aside>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-left">
+    <button class="hamburger-btn" onclick="openSidebar()" aria-label="Abrir menú de navegación">☰</button>
+    <div class="logo-mark">iH</div>
+    <div>
+      <div class="header-title">i-Homotic<span> · </span>UX Research</div>
+      <div class="header-subtitle">Investigación de usuario · Diseño de Interacción · EAFIT 2026</div>
+    </div>
+  </div>
+  <div class="header-badge">Entrega 1 · Medialab</div>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-tag">Entrega 1 · Medialab · EAFIT 2026</div>
+    <h1 class="hero-title">Investigación de<br>Usuario <em>i-Homotic</em></h1>
+    <p class="hero-desc">Exploración cualitativa del usuario objetivo de i-Homotic, empresa de automatización del hogar. A partir de 15 entrevistas semiestructuradas se construyeron los entregables de UX que definen el arquetipo estratégico del mercado digital.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <strong>15</strong>
+        <span>Entrevistas</span>
+      </div>
+      <div class="hero-stat">
+        <strong>4</strong>
+        <span>Entregables</span>
+      </div>
+      <div class="hero-stat">
+        <strong>1</strong>
+        <span>Arquetipo</span>
+      </div>
+      <div class="hero-stat">
+        <strong>5</strong>
+        <span>Insights clave</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Content -->
+<div class="content-area">
+
+  <!-- Context strip -->
+  <div class="context-strip">
+    <div class="context-strip-text">
+      <h3>Contexto del proyecto</h3>
+      <p>i-Homotic busca abrir mercado en el canal digital. Las 15 entrevistas evidenciaron que el usuario que investiga activamente antes de contratar representa la mayor oportunidad de crecimiento: al encontrar la marca online se convierte en cliente y alimenta el voz a voz.</p>
+    </div>
+    <div class="context-strip-badges">
+      <div class="context-badge" style="background:#E8F5E9;color:#2D6A2E;">
+        <strong>15</strong>entrevistas
+      </div>
+      <div class="context-badge" style="background:#FFF3E0;color:#E65100;">
+        <strong>Feb</strong>2026
+      </div>
+      <div class="context-badge" style="background:#EDE7F6;color:#4527A0;">
+        <strong>EAFIT</strong>Medellín
+      </div>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <h2>Entregables de investigación</h2>
+    <p>Selecciona un entregable para explorar el detalle completo.</p>
+  </div>
+
+  <div class="deliverables-grid">
+
+    <!-- 01 · User Persona -->
+    <div class="deliverable-card card-green">
+      <div class="card-top">
+        <div class="card-icon">👤</div>
+        <div class="card-number">Entregable 01</div>
+        <div class="card-title">User Persona</div>
+        <p class="card-desc">Perfil detallado del usuario objetivo: Andrés, "El Explorador Informado". Demográficos, motivaciones, frustraciones, metas y comportamientos digitales ante la automatización del hogar.</p>
+      </div>
+      <div class="card-tags">
+        <span class="card-tag">Perfil de usuario</span>
+        <span class="card-tag">Goals & Pains</span>
+        <span class="card-tag">Comportamiento digital</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-meta">Basado en 15 entrevistas</span>
+        <a href="user_persona.html" class="card-btn">Ver entregable <span class="arrow">→</span></a>
+      </div>
+    </div>
+
+    <!-- 02 · Arquetipo Unificado -->
+    <div class="deliverable-card card-orange">
+      <div class="card-top">
+        <div class="card-icon">🧩</div>
+        <div class="card-number">Entregable 02</div>
+        <div class="card-title">Arquetipo Unificado</div>
+        <p class="card-desc">Síntesis estratégica de los 15 participantes condensada en un único arquetipo. Incluye dimensiones actitudinales, JTBD y el racional de por qué se consolidan 3 perfiles en uno.</p>
+      </div>
+      <div class="card-tags">
+        <span class="card-tag">Arquetipo</span>
+        <span class="card-tag">JTBD</span>
+        <span class="card-tag">Estrategia</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-meta">1 arquetipo · 5 insights</span>
+        <a href="arquetipo_unificado.html" class="card-btn">Ver entregable <span class="arrow">→</span></a>
+      </div>
+    </div>
+
+    <!-- 03 · Comportamiento Generacional -->
+    <div class="deliverable-card card-teal">
+      <div class="card-top">
+        <div class="card-icon">📊</div>
+        <div class="card-number">Entregable 03</div>
+        <div class="card-title">Comportamiento Generacional</div>
+        <p class="card-desc">Análisis del contexto generacional del arquetipo: influencias culturales, hitos históricos de los Millennials tardíos y cómo moldean su relación con la tecnología del hogar.</p>
+      </div>
+      <div class="card-tags">
+        <span class="card-tag">Generacional</span>
+        <span class="card-tag">Millennials</span>
+        <span class="card-tag">Contexto cultural</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-meta">Arquetipo "El Explorador"</span>
+        <a href="comportamiento_generacional.html" class="card-btn">Ver entregable <span class="arrow">→</span></a>
+      </div>
+    </div>
+
+    <!-- 04 · Mapa de Empatía -->
+    <div class="deliverable-card card-purple">
+      <div class="card-top">
+        <div class="card-icon">🗺️</div>
+        <div class="card-number">Entregable 04</div>
+        <div class="card-title">Mapa de Empatía</div>
+        <p class="card-desc">Visualización de lo que el usuario piensa, siente, dice y hace respecto a la automatización del hogar. Incluye dolores, ganancias esperadas y motivaciones de fondo.</p>
+      </div>
+      <div class="card-tags">
+        <span class="card-tag">Empatía</span>
+        <span class="card-tag">Piensa & Siente</span>
+        <span class="card-tag">Dice & Hace</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-meta">15 entrevistas · Feb 2026</span>
+        <a href="mapa_empatia.html" class="card-btn">Ver entregable <span class="arrow">→</span></a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function openSidebar() {
+  document.getElementById('navSidebar').classList.add('open');
+  document.getElementById('navOverlay').classList.add('open');
+}
+function closeSidebar() {
+  document.getElementById('navSidebar').classList.remove('open');
+  document.getElementById('navOverlay').classList.remove('open');
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebar(); });
+
+const btt = document.getElementById('backToTop');
+window.addEventListener('scroll', () => { btt.classList.toggle('visible', window.scrollY > 300); });
+btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+</script>
+
+</body>
+</html>

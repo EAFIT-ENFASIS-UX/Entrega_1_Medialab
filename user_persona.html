@@ -163,12 +163,107 @@
     .persona-top { padding: 24px 20px; }
     .persona-details { padding: 20px; }
   }
+
+  /* ── SIDEBAR NAV ── */
+  .hamburger-btn {
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 8px; width: 40px; height: 40px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: white; font-size: 20px; line-height: 1;
+    transition: background 0.2s; flex-shrink: 0;
+  }
+  .hamburger-btn:hover { background: rgba(255,255,255,0.2); }
+  .nav-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+    z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+  }
+  .nav-overlay.open { opacity: 1; pointer-events: all; }
+  .nav-sidebar {
+    position: fixed; top: 0; left: 0; height: 100vh; width: 280px;
+    background: #fff; z-index: 101;
+    transform: translateX(-100%); transition: transform 0.3s ease;
+    display: flex; flex-direction: column;
+    box-shadow: 4px 0 24px rgba(0,0,0,0.15);
+  }
+  .nav-sidebar.open { transform: translateX(0); }
+  .nav-sidebar-header {
+    background: linear-gradient(135deg, #1B2A1B 0%, #2D6A2E 100%);
+    padding: 20px; display: flex; align-items: center; gap: 14px; flex-shrink: 0;
+  }
+  .nav-sidebar .logo-mark { flex-shrink: 0; }
+  .nav-brand { color: #fff; font-weight: 700; font-size: 16px; }
+  .nav-brand span { color: #E8721A; }
+  .nav-brand-sub { color: rgba(255,255,255,0.55); font-size: 11px; margin-top: 2px; }
+  .nav-close {
+    margin-left: auto; background: rgba(255,255,255,0.1);
+    border: none; color: white; border-radius: 8px;
+    width: 34px; height: 34px; cursor: pointer; font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s; flex-shrink: 0;
+  }
+  .nav-close:hover { background: rgba(255,255,255,0.25); }
+  .nav-links { padding: 16px 12px; flex: 1; overflow-y: auto; }
+  .nav-section-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #9E9E9E; padding: 8px 12px 6px; }
+  .nav-link {
+    display: flex; align-items: center; gap: 12px;
+    padding: 11px 14px; border-radius: 10px; text-decoration: none;
+    color: #424242; font-size: 14px; font-weight: 500;
+    transition: background 0.15s, color 0.15s; margin-bottom: 2px;
+    border-left: 3px solid transparent;
+  }
+  .nav-link:hover { background: #E8F5E9; color: #2D6A2E; }
+  .nav-link.active { background: #E8F5E9; color: #1B5E20; font-weight: 700; border-left-color: #4CAF50; }
+  .nav-icon { font-size: 18px; width: 26px; text-align: center; flex-shrink: 0; }
+  .nav-footer { padding: 16px 20px; border-top: 1px solid #E0E0E0; flex-shrink: 0; }
+  .nav-footer-text { font-size: 11px; color: #9E9E9E; line-height: 1.6; }
+  .nav-footer-text strong { color: #616161; }
+
+  /* ── BACK TO TOP ── */
+  .back-to-top {
+    position: fixed; bottom: 28px; right: 28px; z-index: 200;
+    width: 44px; height: 44px; border-radius: 12px;
+    background: var(--green-dark); color: white; border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s, transform 0.3s;
+    transform: translateY(12px);
+  }
+  .back-to-top.visible { opacity: 1; pointer-events: all; transform: translateY(0); }
+  .back-to-top:hover { background: #1B5E20; transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.25); }
 </style>
 </head>
 <body>
 
+<!-- Overlay + Sidebar -->
+<button class="back-to-top" id="backToTop" aria-label="Volver al inicio" title="Volver arriba">↑</button>
+
+<div class="nav-overlay" id="navOverlay" onclick="closeSidebar()"></div>
+<aside class="nav-sidebar" id="navSidebar">
+  <div class="nav-sidebar-header">
+    <div class="logo-mark">iH</div>
+    <div>
+      <div class="nav-brand">i-Homotic<span> ·</span></div>
+      <div class="nav-brand-sub">UX Research · EAFIT 2026</div>
+    </div>
+    <button class="nav-close" onclick="closeSidebar()">✕</button>
+  </div>
+  <div class="nav-links">
+    <div class="nav-section-label">Navegación</div>
+    <a href="index.html" class="nav-link"><span class="nav-icon">🏠</span> Inicio</a>
+    <a href="user_persona.html" class="nav-link active"><span class="nav-icon">👤</span> User Persona</a>
+    <a href="arquetipo_unificado.html" class="nav-link"><span class="nav-icon">🧩</span> Arquetipo Unificado</a>
+    <a href="comportamiento_generacional.html" class="nav-link"><span class="nav-icon">📊</span> Comportamiento Generacional</a>
+    <a href="mapa_empatia.html" class="nav-link"><span class="nav-icon">🗺️</span> Mapa de Empatía</a>
+  </div>
+  <div class="nav-footer">
+    <div class="nav-footer-text"><strong>i-Homotic UX Research</strong><br>Entrega 1 · Medialab · EAFIT 2026</div>
+  </div>
+</aside>
+
 <header class="header">
   <div class="header-left">
+    <button class="hamburger-btn" onclick="openSidebar()" aria-label="Abrir menú de navegación">☰</button>
     <div class="logo-mark">iH</div>
     <div>
       <div class="header-title">User Persona<span> · </span>i-Homotic</div>
@@ -325,6 +420,22 @@
   <div class="footer-text">Fuente: 15 entrevistas semiestructuradas · Propietarios colombianos, ingresos medio-altos, 30–55 años · Universidad EAFIT · Febrero 2026</div>
   <div class="footer-brand">i-H<span>o</span>motic · Sustainable & Efficient</div>
 </footer>
+
+<script>
+function openSidebar() {
+  document.getElementById('navSidebar').classList.add('open');
+  document.getElementById('navOverlay').classList.add('open');
+}
+function closeSidebar() {
+  document.getElementById('navSidebar').classList.remove('open');
+  document.getElementById('navOverlay').classList.remove('open');
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebar(); });
+
+const btt = document.getElementById('backToTop');
+window.addEventListener('scroll', () => { btt.classList.toggle('visible', window.scrollY > 300); });
+btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+</script>
 
 </body>
 </html>
