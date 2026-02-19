@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapa de Empatía — i-Homotic</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-dark: #2D6A2E;
+    --green-mid: #3A8B3C;
+    --green-light: #4CAF50;
+    --green-pale: #E8F5E9;
+    --orange: #E8721A;
+    --dark: #1B2A1B;
+    --gray-900: #212121;
+    --gray-500: #757575;
+    --gray-100: #F5F5F5;
+    --white: #FFFFFF;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--gray-100);
+    color: var(--gray-900);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: linear-gradient(135deg, var(--dark) 0%, var(--green-dark) 100%);
+    padding: 24px 36px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 16px;
+  }
+  .header-left { display: flex; align-items: center; gap: 18px; }
+  .logo-mark {
+    width: 46px; height: 46px; background: var(--green-light);
+    border-radius: 11px; display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 20px; color: var(--white); position: relative;
+  }
+  .logo-mark::after {
+    content: ''; position: absolute; top: -4px; right: -4px;
+    width: 13px; height: 13px; background: var(--orange); border-radius: 50%;
+  }
+  .header-title { color: var(--white); font-size: 21px; font-weight: 700; }
+  .header-title span { color: var(--orange); }
+  .header-subtitle { color: rgba(255,255,255,0.6); font-size: 12.5px; margin-top: 2px; }
+  .header-badge {
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px; padding: 7px 16px; color: rgba(255,255,255,0.8); font-size: 12px;
+  }
+
+  /* ── PERSONA ── */
+  .persona-strip {
+    background: var(--white); border-bottom: 3px solid var(--green-light);
+    padding: 18px 36px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+  }
+  .persona-avatar {
+    width: 58px; height: 58px; border-radius: 50%; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--green-light), var(--green-dark));
+    display: flex; align-items: center; justify-content: center;
+  }
+  .persona-avatar svg { width: 30px; height: 30px; fill: var(--white); }
+  .persona-info h2 { font-size: 17px; font-weight: 700; color: var(--green-dark); }
+  .persona-info p { font-size: 13px; color: var(--gray-500); margin-top: 2px; max-width: 680px; line-height: 1.45; }
+  .persona-tags { display: flex; gap: 7px; flex-wrap: wrap; margin-left: auto; }
+  .persona-tag {
+    font-size: 11px; padding: 4px 11px; border-radius: 12px;
+    background: var(--green-pale); color: var(--green-dark); font-weight: 600;
+  }
+
+  /* ── LEGEND ── */
+  .legend-bar {
+    background: var(--white);
+    padding: 12px 36px;
+    display: flex; align-items: center; gap: 28px; flex-wrap: wrap;
+    border-bottom: 1px solid #E0E0E0;
+  }
+  .legend-title {
+    font-size: 12px; font-weight: 700; color: var(--gray-500);
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--gray-900);
+  }
+  .legend-dot {
+    width: 18px; height: 18px; border-radius: 3px; flex-shrink: 0;
+  }
+  .legend-dot.yellow { background: #FFF9C4; border: 2px solid #F9E84D; }
+  .legend-dot.blue { background: #BBDEFB; border: 2px solid #64B5F6; }
+  .legend-dot.green { background: #C8E6C9; border: 2px solid #81C784; }
+  .legend-dot.pink { background: #F8BBD0; border: 2px solid #F06292; }
+
+  /* ── MAP ── */
+  .map-container { max-width: 1480px; margin: 0 auto; padding: 24px 20px 32px; }
+
+  .map-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+  }
+
+  .quadrant {
+    padding: 22px 24px 26px; border-radius: 14px; min-height: 340px;
+  }
+  .q-think { background: #F4FAF4; }
+  .q-see   { background: #F3F8FE; }
+  .q-hear  { background: #FFFAF3; }
+  .q-do    { background: #FEF5F7; }
+
+  .quadrant-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+  .quadrant-icon {
+    width: 38px; height: 38px; border-radius: 9px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .quadrant-icon svg { width: 20px; height: 20px; }
+  .q-think .quadrant-icon { background: #C8E6C9; }
+  .q-think .quadrant-icon svg { fill: var(--green-dark); }
+  .q-see .quadrant-icon { background: #BBDEFB; }
+  .q-see .quadrant-icon svg { fill: #1565C0; }
+  .q-hear .quadrant-icon { background: #FFE0B2; }
+  .q-hear .quadrant-icon svg { fill: #E65100; }
+  .q-do .quadrant-icon { background: #F8BBD0; }
+  .q-do .quadrant-icon svg { fill: #C62828; }
+
+  .quadrant-title { font-size: 15px; font-weight: 700; }
+  .q-think .quadrant-title { color: var(--green-dark); }
+  .q-see .quadrant-title { color: #1565C0; }
+  .q-hear .quadrant-title { color: #E65100; }
+  .q-do .quadrant-title { color: #C62828; }
+  .quadrant-subtitle { font-size: 11px; color: var(--gray-500); }
+
+  /* ── STICKIES ── */
+  .notes-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+
+  .sticky {
+    padding: 14px 16px; border-radius: 4px;
+    font-family: 'Patrick Hand', cursive;
+    font-size: 16.5px; line-height: 1.4; color: #2C2C2C;
+    transform: rotate(var(--rot, 0deg));
+    box-shadow: 2px 3px 7px rgba(0,0,0,0.09);
+    transition: transform 0.2s, box-shadow 0.2s;
+    max-width: 260px; min-width: 180px; flex: 1 1 180px;
+    cursor: default; position: relative;
+  }
+  .sticky:hover {
+    transform: rotate(0deg) scale(1.03);
+    box-shadow: 3px 5px 16px rgba(0,0,0,0.14); z-index: 10;
+  }
+  .sticky em {
+    font-style: italic; opacity: 0.7; font-size: 14px;
+    display: block; margin-top: 4px;
+  }
+
+  /* 4 color system */
+  .sticky.yellow { background: #FFF9C4; border-left: 4px solid #F9E84D; }
+  .sticky.blue   { background: #BBDEFB; border-left: 4px solid #64B5F6; }
+  .sticky.green  { background: #C8E6C9; border-left: 4px solid #81C784; }
+  .sticky.pink   { background: #F8BBD0; border-left: 4px solid #F06292; }
+
+  /* ── PAINS & GAINS ── */
+  .bottom-section {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 6px;
+  }
+  .bottom-panel { padding: 22px 24px 26px; min-height: 240px; border-radius: 14px; }
+  .pains-panel { background: #FFF5F5; border-top: 4px solid #EF5350; }
+  .gains-panel { background: #F1F8E9; border-top: 4px solid #66BB6A; }
+
+  .bottom-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+  .bottom-icon {
+    width: 38px; height: 38px; border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .bottom-icon svg { width: 20px; height: 20px; }
+  .pains-panel .bottom-icon { background: #FFCDD2; }
+  .pains-panel .bottom-icon svg { fill: #C62828; }
+  .gains-panel .bottom-icon { background: #C8E6C9; }
+  .gains-panel .bottom-icon svg { fill: #2E7D32; }
+  .bottom-title { font-size: 15px; font-weight: 700; }
+  .pains-panel .bottom-title { color: #C62828; }
+  .gains-panel .bottom-title { color: #2E7D32; }
+  .bottom-subtitle { font-size: 11px; color: var(--gray-500); }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: var(--dark); padding: 18px 36px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px; margin-top: 6px;
+  }
+  .footer-text { color: rgba(255,255,255,0.45); font-size: 11px; }
+  .footer-brand { color: rgba(255,255,255,0.65); font-size: 12px; font-weight: 600; }
+  .footer-brand span { color: var(--orange); }
+
+  @media (max-width: 900px) {
+    .map-grid, .bottom-section { grid-template-columns: 1fr; }
+    .quadrant, .bottom-panel { margin-bottom: 6px; }
+    .header, .persona-strip, .legend-bar, .footer { padding: 16px 18px; }
+    .persona-tags { margin-left: 0; }
+    .sticky { max-width: 100%; }
+    .legend-bar { gap: 14px; }
+  }
+  @media print {
+    body { background: white; }
+    .sticky:hover { transform: rotate(var(--rot, 0deg)) scale(1); }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-left">
+    <div class="logo-mark">iH</div>
+    <div>
+      <div class="header-title">Mapa de Empatía<span> · </span>i-Homotic</div>
+      <div class="header-subtitle">Investigación de usuario · Diseño de Interacción · EAFIT 2026</div>
+    </div>
+  </div>
+  <div class="header-badge">Basado en 15 entrevistas a profundidad · Feb 2026</div>
+</header>
+
+<!-- PERSONA -->
+<section class="persona-strip">
+  <div class="persona-avatar">
+    <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+  </div>
+  <div class="persona-info">
+    <h2>Propietario colombiano · Ingresos medio-altos · 30–55 años</h2>
+    <p>Profesional activo con casa o apartamento propio. Valora la tranquilidad, la familia y el confort de su hogar. Invierte en mejoras pero quiere minimizar riesgos. Busca información en digital pero decide por confianza y voz a voz.</p>
+  </div>
+  <div class="persona-tags">
+    <span class="persona-tag">🏠 Hogar propio</span>
+    <span class="persona-tag">💼 Profesional</span>
+    <span class="persona-tag">📱 Digital pero cauteloso</span>
+    <span class="persona-tag">👨‍👩‍👧 Decisión familiar</span>
+  </div>
+</section>
+
+<!-- LEGEND -->
+<section class="legend-bar">
+  <div class="legend-title">Leyenda de Post-its</div>
+  <div class="legend-item"><div class="legend-dot yellow"></div>Datos, hechos y citas</div>
+  <div class="legend-item"><div class="legend-dot blue"></div>Comportamientos</div>
+  <div class="legend-item"><div class="legend-dot green"></div>Metas y motivaciones</div>
+  <div class="legend-item"><div class="legend-dot pink"></div>Puntos de dolor</div>
+</section>
+
+<!-- MAP -->
+<div class="map-container">
+  <div class="map-grid">
+
+    <!-- ━━━ PIENSA Y SIENTE ━━━ -->
+    <div class="quadrant q-think">
+      <div class="quadrant-header">
+        <div class="quadrant-icon"><svg viewBox="0 0 24 24"><path d="M12 2a9 9 0 00-9 9c0 3.07 1.64 5.64 4 7.24V20a1 1 0 001 1h8a1 1 0 001-1v-1.76A8.94 8.94 0 0021 11a9 9 0 00-9-9zm0 16h-4v-1h8v1zm2.85-4.53L14 14.14V16h-4v-1.86l-.85-.67A5.97 5.97 0 016 9a6 6 0 1112 0 5.97 5.97 0 01-3.15 4.47z"/></svg></div>
+        <div>
+          <div class="quadrant-title">Piensa y Siente</div>
+          <div class="quadrant-subtitle">¿Qué sucede en su mente? Preocupaciones, aspiraciones, emociones</div>
+        </div>
+      </div>
+      <div class="notes-grid">
+        <div class="sticky green" style="--rot:-0.8deg">
+          Quiere que su hogar sea un refugio: paz, tranquilidad, silencio después de la jornada laboral
+          <em>— Alejandro: "Mi casa me da paz, bienestar… eso es seguridad"</em>
+        </div>
+        <div class="sticky green" style="--rot:0.6deg">
+          Quiere que cada mejora refleje quién es — cada remodelación es un proyecto personal con carga emocional
+        </div>
+        <div class="sticky pink" style="--rot:-0.4deg">
+          Le preocupa tomar malas decisiones: ha tenido experiencias donde el resultado no fue lo esperado y eso lo marca
+        </div>
+        <div class="sticky pink" style="--rot:1.2deg">
+          Se debate entre empresas grandes (confiables pero costosas) vs. independientes (baratos pero riesgosos)
+        </div>
+        <div class="sticky yellow" style="--rot:-1deg">
+          No confía en la publicidad tanto como en el testimonio real de alguien que ya lo vivió
+          <em>— Carlos: "Me genera más credibilidad el voz a voz que cualquier plataforma"</em>
+        </div>
+        <div class="sticky green" style="--rot:0.5deg">
+          Le interesa la domótica: sabe lo básico, pero no conoce marcas ni cómo se instala
+          <em>— Carolina: "Sé pa' qué sirve, pero no sé de marcas ni cómo se instalaría"</em>
+        </div>
+        <div class="sticky pink" style="--rot:0.9deg">
+          Siente que la tecnología avanza rápido y debe adaptarse, pero no quiere sentirse abrumado ni perder el control
+        </div>
+        <div class="sticky green" style="--rot:-0.6deg">
+          Piensa en seguridad del hogar: cámaras, alarmas, dispositivos que le alerten si algo pasa cuando no está
+        </div>
+      </div>
+    </div>
+
+    <!-- ━━━ VE ━━━ -->
+    <div class="quadrant q-see">
+      <div class="quadrant-header">
+        <div class="quadrant-icon"><svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg></div>
+        <div>
+          <div class="quadrant-title">Ve</div>
+          <div class="quadrant-subtitle">¿Qué observa en su entorno, mercado y medios?</div>
+        </div>
+      </div>
+      <div class="notes-grid">
+        <div class="sticky yellow" style="--rot:0.7deg">
+          Publicidad de Homecenter, Constructor y grandes almacenes — pero no encuentra proveedores confiables de servicios integrales
+        </div>
+        <div class="sticky yellow" style="--rot:-1deg">
+          Influencers de decoración en redes sociales, antes/después de remodelaciones, ideas en Pinterest e Instagram
+        </div>
+        <div class="sticky yellow" style="--rot:0.4deg">
+          Vecinos y conocidos que hicieron mejoras: les pregunta cómo les fue y con quién trabajaron
+        </div>
+        <div class="sticky yellow" style="--rot:-0.5deg">
+          Smart TVs, Alexa, Roomba y asistentes de voz ya son normales en hogares de su nivel socioeconómico
+        </div>
+        <div class="sticky pink" style="--rot:1.1deg">
+          Páginas web de proveedores sin videos, sin portafolio, sin testimonios — genera desconfianza inmediata
+          <em>— Ángela: "No te muestran un catálogo ni experiencia sólida"</em>
+        </div>
+        <div class="sticky yellow" style="--rot:-0.3deg">
+          Constructoras que ya usan experiencias inmersivas y renders, pero los proveedores del hogar todavía no
+        </div>
+        <div class="sticky blue" style="--rot:0.8deg">
+          Usa Google, YouTube, ChatGPT y reseñas online como fuentes de evaluación antes de tomar decisiones de compra
+        </div>
+      </div>
+    </div>
+
+    <!-- ━━━ OYE ━━━ -->
+    <div class="quadrant q-hear">
+      <div class="quadrant-header">
+        <div class="quadrant-icon"><svg viewBox="0 0 24 24"><path d="M12 1c-4.97 0-9 4.03-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2c0-3.87 3.13-7 7-7s7 3.13 7 7v2h-4v8h3c1.66 0 3-1.34 3-3v-7c0-4.97-4.03-9-9-9z"/></svg></div>
+        <div>
+          <div class="quadrant-title">Oye</div>
+          <div class="quadrant-subtitle">¿Qué escucha de familia, amigos, colegas y medios?</div>
+        </div>
+      </div>
+      <div class="notes-grid">
+        <div class="sticky yellow" style="--rot:-0.6deg">
+          Recomendaciones voz a voz: "Este trabaja bien, es económico y es responsable"
+          <em>— El canal #1 de confianza para contratar servicios del hogar</em>
+        </div>
+        <div class="sticky yellow" style="--rot:1deg">
+          La familia opina y participa: "Mija, ¿cómo hacemos esto? ¿Ustedes qué dicen?" — se busca consenso
+        </div>
+        <div class="sticky yellow" style="--rot:-1.2deg">
+          Historias de fracasos ajenos: contratistas que no cumplen, materiales dañados, obras que nunca terminan
+        </div>
+        <div class="sticky yellow" style="--rot:0.5deg">
+          Le recomiendan la administración del edificio, la inmobiliaria, o el amigo que "conoce a alguien bueno"
+        </div>
+        <div class="sticky yellow" style="--rot:-0.8deg">
+          Escucha que la domótica sirve para ahorro de energía, seguridad y comodidad — pero nadie le explica por dónde empezar
+        </div>
+        <div class="sticky blue" style="--rot:1.4deg">
+          Hijos jóvenes le enseñan tecnología: ChatGPT, apps, plataformas digitales. Se apoya en ellos para aprender
+        </div>
+        <div class="sticky yellow" style="--rot:0.3deg">
+          "Uno tiene que ir a la vanguardia de la tecnología, independiente de la edad que tenga"
+          <em>— Cristina, 50 años</em>
+        </div>
+      </div>
+    </div>
+
+    <!-- ━━━ DICE Y HACE ━━━ -->
+    <div class="quadrant q-do">
+      <div class="quadrant-header">
+        <div class="quadrant-icon"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg></div>
+        <div>
+          <div class="quadrant-title">Dice y Hace</div>
+          <div class="quadrant-subtitle">Comportamientos observables y declaraciones</div>
+        </div>
+      </div>
+      <div class="notes-grid">
+        <div class="sticky blue" style="--rot:0.5deg">
+          Busca proveedores primero por voz a voz, luego valida en digital (Google, YouTube, ChatGPT)
+        </div>
+        <div class="sticky blue" style="--rot:-0.9deg">
+          Cotiza con 2 o 3 personas máximo, casi siempre por recomendación directa de alguien de confianza
+        </div>
+        <div class="sticky blue" style="--rot:0.3deg">
+          Prioriza necesidades antes que deseos: primero seguridad y funcionalidad, después estética
+        </div>
+        <div class="sticky blue" style="--rot:-0.7deg">
+          Decisiones grandes se toman en familia: uno define lo estético, el otro maneja el presupuesto
+          <em>— Carolina: "Yo escojo lo estético, él mira cómo paga"</em>
+        </div>
+        <div class="sticky blue" style="--rot:1.1deg">
+          Compra materiales en almacenes grandes, pero la mano de obra la busca informal o por referidos
+        </div>
+        <div class="sticky blue" style="--rot:-0.2deg">
+          Lee reseñas y comentarios online antes de decidir. Si no hay suficiente información, espera o desiste
+        </div>
+        <div class="sticky blue" style="--rot:0.7deg">
+          Aprende tecnología de forma autónoma: tutoriales, YouTube, prueba y error. No quiere manuales largos
+        </div>
+        <div class="sticky blue" style="--rot:-1.2deg">
+          Compra tecnología gradualmente: prueba un dispositivo, y si funciona, va expandiendo el ecosistema
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ━━━ PAINS & GAINS ━━━ -->
+  <div class="bottom-section">
+
+    <!-- ESFUERZOS -->
+    <div class="bottom-panel pains-panel">
+      <div class="bottom-header">
+        <div class="bottom-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg></div>
+        <div>
+          <div class="bottom-title">Esfuerzos (Pains)</div>
+          <div class="bottom-subtitle">Frustraciones, miedos y obstáculos</div>
+        </div>
+      </div>
+      <div class="notes-grid">
+        <div class="sticky pink" style="--rot:-0.4deg">
+          No saber si el proveedor va a cumplir: las malas experiencias destruyen la confianza permanentemente
+          <em>— Yumarli: "Eso hace que uno deje de confiar en la gente"</em>
+        </div>
+        <div class="sticky pink" style="--rot:0.7deg">
+          La logística de remodelar es desgastante: suciedad, trasteos, tiempos incumplidos, vivir en obra
+          <em>— Shirley: "Fue un desgaste tanto físico como mental"</em>
+        </div>
+        <div class="sticky pink" style="--rot:-0.9deg">
+          Empresas sin presencia digital creíble: sin portafolio visual, sin testimonios, sin videos de trabajos reales
+        </div>
+        <div class="sticky pink" style="--rot:1.1deg">
+          Miedo a invertir en tecnología nueva sin reviews confiables ni suficiente información
+          <em>— Mauricio: "Estoy esperando a que salga algo más sólido"</em>
+        </div>
+        <div class="sticky pink" style="--rot:0.3deg">
+          Presupuestos que se desbordan: materiales dañados, costos ocultos, retrasos inesperados
+        </div>
+        <div class="sticky pink" style="--rot:-1deg">
+          No existe servicio integral: compra materiales en un sitio y busca quién instale por otro lado
+          <em>— Carlos: "Que la empresa preste todo el paquete, un servicio integral"</em>
+        </div>
+        <div class="sticky pink" style="--rot:0.5deg">
+          Proveedores sin pedagogía: no explican cómo va a quedar, no entienden las proyecciones del cliente
+          <em>— Ángela: "No tienen pedagogía para explicar cómo quedará tu casa"</em>
+        </div>
+        <div class="sticky pink" style="--rot:-0.6deg">
+          Contratistas que desaparecen o no terminan: lo que debía tomar 2 semanas se extiende a 6
+          <em>— Carolina: "Esperan a que uno se empute para ponerse a trabajar"</em>
+        </div>
+      </div>
+    </div>
+
+    <!-- GANANCIAS -->
+    <div class="bottom-panel gains-panel">
+      <div class="bottom-header">
+        <div class="bottom-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div>
+        <div>
+          <div class="bottom-title">Ganancias (Gains)</div>
+          <div class="bottom-subtitle">Deseos, necesidades satisfechas y beneficios esperados</div>
+        </div>
+      </div>
+      <div class="notes-grid">
+        <div class="sticky green" style="--rot:0.4deg">
+          Ver un catálogo con antes/después, fotos y videos de trabajos reales genera confianza inmediata
+          <em>— Yumarli: "Que puedas ver un catálogo de cambios, un antes y un después"</em>
+        </div>
+        <div class="sticky green" style="--rot:-0.8deg">
+          Servicio integral: materiales + mano de obra + transporte + garantía posventa, todo en un solo lugar
+        </div>
+        <div class="sticky green" style="--rot:0.9deg">
+          Tecnología intuitiva y plug and play que no requiera cursos — que dé pistas de cómo funciona sola
+        </div>
+        <div class="sticky green" style="--rot:-0.3deg">
+          Experiencias visuales e inmersivas: renders del espacio real, cocreación con el proveedor, simulaciones
+          <em>— Carolina: "Un espacio de cocreación donde uno pueda arrastrar y pegar"</em>
+        </div>
+        <div class="sticky green" style="--rot:0.6deg">
+          Transparencia total: precios claros, tiempos honestos, respuesta rápida ante problemas
+          <em>— José Gabriel: "Lo más importante es honestidad y transparencia en todo"</em>
+        </div>
+        <div class="sticky green" style="--rot:-1.1deg">
+          Automatizar lo cotidiano: ahorro de energía, seguridad remota, limpieza inteligente, control por voz
+        </div>
+        <div class="sticky green" style="--rot:0.2deg">
+          Página web con videos explicativos, atención personalizada y respuestas inmediatas
+          <em>— William: "Una página web con videos, eso para mí es de muchísima importancia"</em>
+        </div>
+        <div class="sticky green" style="--rot:-0.5deg">
+          Confianza verificable: referencias accesibles, reseñas de otros clientes, trayectoria visible de la empresa
+          <em>— Ángela: "Que todo esté consolidado: proyectos, crecimiento, experiencia"</em>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-text">Fuente: 15 entrevistas semiestructuradas · Propietarios colombianos, ingresos medio-altos, 30–55 años · Universidad EAFIT · Febrero 2026</div>
+  <div class="footer-brand">i-H<span>o</span>motic · Sustainable & Efficient</div>
+</footer>
+
+</body>
+</html>

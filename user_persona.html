@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Persona — i-Homotic</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700&family=Playfair+Display:ital,wght@0,700;1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-dark: #2D6A2E; --green-light: #4CAF50; --green-pale: #E8F5E9;
+    --orange: #E8721A; --dark: #1B2A1B;
+    --gray-900: #212121; --gray-700: #424242; --gray-500: #757575;
+    --gray-300: #E0E0E0; --gray-100: #F5F5F5; --white: #FFFFFF;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--gray-100); color: var(--gray-900); }
+
+  .header {
+    background: linear-gradient(135deg, var(--dark) 0%, var(--green-dark) 100%);
+    padding: 24px 36px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+  }
+  .header-left { display: flex; align-items: center; gap: 18px; }
+  .logo-mark {
+    width: 46px; height: 46px; background: var(--green-light); border-radius: 11px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 20px; color: var(--white); position: relative;
+  }
+  .logo-mark::after { content: ''; position: absolute; top: -4px; right: -4px; width: 13px; height: 13px; background: var(--orange); border-radius: 50%; }
+  .header-title { color: var(--white); font-size: 21px; font-weight: 700; }
+  .header-title span { color: var(--orange); }
+  .header-subtitle { color: rgba(255,255,255,0.6); font-size: 12.5px; margin-top: 2px; }
+  .header-badge { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 7px 16px; color: rgba(255,255,255,0.8); font-size: 12px; }
+
+  .content-area { max-width: 1100px; margin: 0 auto; padding: 32px 24px 48px; }
+
+  /* PERSONA CARD */
+  .persona-hero {
+    background: var(--white); border-radius: 20px; overflow: hidden; margin-bottom: 28px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06); border: 1px solid var(--gray-300);
+  }
+  .persona-top {
+    background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 60%, #A5D6A7 100%);
+    padding: 36px 32px; display: flex; align-items: center; gap: 28px; flex-wrap: wrap;
+  }
+  .persona-avatar {
+    width: 110px; height: 110px; border-radius: 50%; flex-shrink: 0;
+    background: var(--white); display: flex; align-items: center; justify-content: center;
+    font-size: 52px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  }
+  .persona-name { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; color: var(--green-dark); }
+  .persona-tagline { font-size: 15px; color: var(--gray-700); margin-top: 4px; font-style: italic; }
+  .persona-archetype {
+    margin-top: 12px; display: inline-block; padding: 5px 14px; border-radius: 20px;
+    background: rgba(45,106,46,0.15); color: var(--green-dark); font-size: 12px; font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+
+  .persona-details {
+    padding: 28px 32px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+    border-top: 3px solid var(--green-light);
+  }
+  .detail-item { padding: 0 16px; border-right: 1px solid var(--gray-300); }
+  .detail-item:first-child { padding-left: 0; }
+  .detail-item:last-child { border-right: none; padding-right: 0; }
+  .detail-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--gray-500); margin-bottom: 4px; }
+  .detail-value { font-size: 14px; font-weight: 600; color: var(--gray-900); }
+  .detail-sub { font-size: 12px; color: var(--gray-500); margin-top: 2px; }
+
+  /* PERSONALITY */
+  .personality-section {
+    background: var(--white); border-radius: 16px; padding: 28px 32px; margin-bottom: 24px;
+    border: 1px solid var(--gray-300);
+  }
+  .section-title {
+    font-size: 16px; font-weight: 700; color: var(--green-dark); margin-bottom: 18px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-title .icon {
+    width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 17px;
+  }
+  .adj-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .adj-card {
+    border-radius: 12px; padding: 20px; text-align: center;
+    border: 2px solid; position: relative;
+  }
+  .adj-card:nth-child(1) { background: #E8F5E9; border-color: #A5D6A7; }
+  .adj-card:nth-child(2) { background: #E3F2FD; border-color: #90CAF9; }
+  .adj-card:nth-child(3) { background: #FFF3E0; border-color: #FFCC80; }
+  .adj-emoji { font-size: 28px; margin-bottom: 8px; }
+  .adj-word { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+  .adj-card:nth-child(1) .adj-word { color: #2E7D32; }
+  .adj-card:nth-child(2) .adj-word { color: #1565C0; }
+  .adj-card:nth-child(3) .adj-word { color: #E65100; }
+  .adj-desc { font-size: 13px; color: var(--gray-700); line-height: 1.5; }
+
+  /* SCENARIO */
+  .scenario-section {
+    background: var(--white); border-radius: 16px; padding: 28px 32px; margin-bottom: 24px;
+    border: 1px solid var(--gray-300);
+  }
+  .scenario-box {
+    background: linear-gradient(135deg, #FAFAFA, #F5F5F5); border-radius: 12px;
+    padding: 24px 28px; border-left: 5px solid var(--orange);
+    font-size: 14.5px; color: var(--gray-700); line-height: 1.7;
+  }
+  .scenario-box p + p { margin-top: 14px; }
+  .scenario-box em { color: var(--gray-500); font-size: 13px; }
+  .scenario-box strong { color: var(--gray-900); }
+  .scenario-label {
+    display: inline-block; margin-bottom: 12px; padding: 4px 12px; border-radius: 6px;
+    background: #FFF3E0; color: var(--orange); font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+
+  /* TOUCHPOINTS */
+  .touch-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .touch-card {
+    border-radius: 12px; padding: 18px 20px; display: flex; align-items: flex-start; gap: 14px;
+  }
+  .touch-card.physical { background: #FFF3E0; border: 1px solid #FFCC80; }
+  .touch-card.digital { background: #E3F2FD; border: 1px solid #90CAF9; }
+  .touch-icon { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
+  .touch-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .touch-card.physical .touch-label { color: #E65100; }
+  .touch-card.digital .touch-label { color: #1565C0; }
+  .touch-text { font-size: 13.5px; color: var(--gray-700); line-height: 1.5; }
+
+  /* FRUSTRATION & SUCCESS */
+  .dual-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+  .frust-card, .success-card {
+    border-radius: 16px; padding: 28px 28px; border: 1px solid;
+  }
+  .frust-card {
+    background: linear-gradient(135deg, #FFF5F5, #FFEBEE); border-color: #EF9A9A;
+  }
+  .success-card {
+    background: linear-gradient(135deg, #F1F8E9, #E8F5E9); border-color: #A5D6A7;
+  }
+  .frust-card .section-title { color: #C62828; }
+  .success-card .section-title { color: #2E7D32; }
+  .emotion-text { font-size: 14.5px; color: var(--gray-700); line-height: 1.65; }
+  .emotion-text strong { color: var(--gray-900); }
+  .emotion-quote {
+    margin-top: 14px; padding: 12px 16px; border-radius: 8px; font-style: italic;
+    font-size: 13.5px; line-height: 1.5;
+  }
+  .frust-card .emotion-quote { background: rgba(198,40,40,0.06); color: #B71C1C; border-left: 3px solid #EF5350; }
+  .success-card .emotion-quote { background: rgba(46,125,50,0.06); color: #1B5E20; border-left: 3px solid #66BB6A; }
+
+  .footer {
+    background: var(--dark); padding: 18px 36px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+  }
+  .footer-text { color: rgba(255,255,255,0.45); font-size: 11px; }
+  .footer-brand { color: rgba(255,255,255,0.65); font-size: 12px; font-weight: 600; }
+  .footer-brand span { color: var(--orange); }
+
+  @media (max-width: 900px) {
+    .persona-details { grid-template-columns: 1fr 1fr; gap: 16px; }
+    .detail-item { border-right: none; padding: 0; }
+    .adj-grid, .touch-grid, .dual-grid { grid-template-columns: 1fr; }
+    .header, .footer { padding-left: 18px; padding-right: 18px; }
+    .content-area { padding: 20px 16px 40px; }
+    .persona-top { padding: 24px 20px; }
+    .persona-details { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-left">
+    <div class="logo-mark">iH</div>
+    <div>
+      <div class="header-title">User Persona<span> · </span>i-Homotic</div>
+      <div class="header-subtitle">Derivado del arquetipo "El Explorador Informado" · EAFIT 2026</div>
+    </div>
+  </div>
+  <div class="header-badge">Basado en 15 entrevistas semiestructuradas</div>
+</header>
+
+<div class="content-area">
+
+  <!-- ═══════ IDENTIDAD ═══════ -->
+  <div class="persona-hero">
+    <div class="persona-top">
+      <div class="persona-avatar">👩‍💼</div>
+      <div>
+        <div class="persona-name">Cristina Restrepo</div>
+        <div class="persona-tagline">"Quiero que mi casa sea más inteligente, pero necesito ver que funciona antes de invertir."</div>
+        <div class="persona-archetype">Arquetipo: El Explorador Informado</div>
+      </div>
+    </div>
+    <div class="persona-details">
+      <div class="detail-item">
+        <div class="detail-label">Edad</div>
+        <div class="detail-value">42 años</div>
+        <div class="detail-sub">Generación Millennial tardía</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">Profesión</div>
+        <div class="detail-value">Coordinadora administrativa</div>
+        <div class="detail-sub">Empresa del sector industrial · 15 años de experiencia</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">Ubicación</div>
+        <div class="detail-value">Medellín, Valle de Aburrá</div>
+        <div class="detail-sub">Apartamento propio · Estrato 4</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">Hogar</div>
+        <div class="detail-value">Vive con su esposo y dos hijos</div>
+        <div class="detail-sub">Hijo universitario (20) · Hija adolescente (15)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ PERSONALIDAD ═══════ -->
+  <div class="personality-section">
+    <div class="section-title"><div class="icon" style="background:#E8F5E9;">🎭</div> Personalidad — 3 adjetivos clave</div>
+    <div class="adj-grid">
+      <div class="adj-card">
+        <div class="adj-emoji">🔍</div>
+        <div class="adj-word">Metódica</div>
+        <div class="adj-desc">No compra nada significativo sin investigar primero. Busca en Google, YouTube y pide opiniones a su hijo antes de decidir. Cotiza con máximo 2 o 3 opciones, siempre validando con evidencia digital.</div>
+      </div>
+      <div class="adj-card">
+        <div class="adj-emoji">🛡️</div>
+        <div class="adj-word">Cautelosa</div>
+        <div class="adj-desc">Las malas experiencias con contratistas la marcaron. Ahora exige ver portafolio, testimonios y resultados antes de dar el paso. Si no encuentra suficiente información, prefiere esperar antes que arriesgarse.</div>
+      </div>
+      <div class="adj-card">
+        <div class="adj-emoji">🚀</div>
+        <div class="adj-word">Aspiracional</div>
+        <div class="adj-desc">Sueña con un hogar más tecnológico e inteligente. Ya tiene Alexa, Smart TV y cámaras del edificio. Sabe que la domótica existe y le interesa, pero avanza paso a paso — probando antes de expandir.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ ESCENARIO ═══════ -->
+  <div class="scenario-section">
+    <div class="section-title"><div class="icon" style="background:#FFF3E0;">📖</div> El Escenario — Un día de crisis</div>
+    <div class="scenario-box">
+      <div class="scenario-label">Sábado, 9:30 a.m.</div>
+      <p>Cristina llega de un viaje de trabajo de tres días. Al entrar al apartamento, nota que <strong>la cocina tiene una fuga de agua</strong> que no habían detectado. Su esposo intentó buscar un plomero por voz a voz, pero el que le recomendaron no contestó. Mientras resuelven la urgencia, su hijo le menciona que vio en YouTube una casa que <strong>tiene sensores de humedad que alertan al celular</strong> cuando detectan fugas, incluso si nadie está en casa.</p>
+      <p>Cristina se sienta en la sala, abre Google en el celular y escribe <strong>"sensores inteligentes para casa Colombia"</strong>. Encuentra varias opciones, pero las páginas de los proveedores locales no tienen videos, ni portafolios, ni testimonios. Solo fotos genéricas y listas de precios. <strong>Siente desconfianza inmediata</strong>. Busca en YouTube, encuentra un par de videos, pero son de marcas extranjeras que no se venden aquí.</p>
+      <p>Le pregunta a su hijo si conoce alguna empresa colombiana que haga domótica. Él busca en Instagram y no encuentra nada convincente. Cristina piensa: <strong>"Si tuviera una página con videos de casas reales donde ya funcione esto, yo contrataría de una. Pero así, a ciegas, no me meto."</strong></p>
+      <p><em>La fuga se resuelve con el plomero del vecino. Pero la idea de automatizar la seguridad del hogar queda pendiente — esperando a que alguien le dé la confianza suficiente para dar el primer paso.</em></p>
+    </div>
+  </div>
+
+  <!-- ═══════ PUNTOS DE CONTACTO ═══════ -->
+  <div class="personality-section">
+    <div class="section-title"><div class="icon" style="background:#E3F2FD;">📱</div> Puntos de Contacto — Objetos físicos y digitales simultáneos</div>
+    <div class="touch-grid">
+      <div class="touch-card digital">
+        <div class="touch-icon">📱</div>
+        <div>
+          <div class="touch-label">Smartphone (Android)</div>
+          <div class="touch-text">WhatsApp como canal principal de comunicación. Google para buscar proveedores. YouTube para tutoriales cortos. Instagram para inspiración de decoración y antes/después.</div>
+        </div>
+      </div>
+      <div class="touch-card digital">
+        <div class="touch-icon">🔊</div>
+        <div>
+          <div class="touch-label">Alexa / Google Home</div>
+          <div class="touch-text">Tiene un Alexa en la sala que usa para música, alarmas y preguntas rápidas. Ya entiende el concepto de control por voz. Es la puerta de entrada a la domótica.</div>
+        </div>
+      </div>
+      <div class="touch-card digital">
+        <div class="touch-icon">💻</div>
+        <div>
+          <div class="touch-label">Portátil / Smart TV</div>
+          <div class="touch-text">Usa el portátil del trabajo. La Smart TV está conectada a Netflix y YouTube. El hijo juega videojuegos online — la conectividad del hogar es prioridad.</div>
+        </div>
+      </div>
+      <div class="touch-card physical">
+        <div class="touch-icon">🏪</div>
+        <div>
+          <div class="touch-label">Homecenter / Almacenes de cadena</div>
+          <div class="touch-text">Compra materiales en tiendas grandes donde hay garantía. Para mano de obra, confía en referidos del edificio o familiares.</div>
+        </div>
+      </div>
+      <div class="touch-card digital">
+        <div class="touch-icon">🤖</div>
+        <div>
+          <div class="touch-label">ChatGPT</div>
+          <div class="touch-text">Su hijo le enseñó a usarlo. Lo consulta para comparar marcas, pedir recomendaciones y entender conceptos técnicos antes de comprar.</div>
+        </div>
+      </div>
+      <div class="touch-card physical">
+        <div class="touch-icon">🏠</div>
+        <div>
+          <div class="touch-label">Cámaras del edificio (app)</div>
+          <div class="touch-text">La administración instaló cámaras con acceso desde el celular. Fue su primera experiencia con seguridad inteligente y le gustó — quiere más.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ FRUSTRACIÓN Y ÉXITO ═══════ -->
+  <div class="dual-grid">
+    <div class="frust-card">
+      <div class="section-title"><div class="icon" style="background:#FFEBEE;">😤</div> Frustración Máxima</div>
+      <div class="emotion-text">
+        Encontrar un proveedor de domótica que le interesa, entrar a su página web y ver <strong>solo texto genérico, sin videos, sin portafolio de proyectos reales, sin testimonios de clientes</strong>. Eso le genera desconfianza inmediata y abandona la página en menos de un minuto. Siente que si la empresa no puede mostrar evidencia de lo que hace, probablemente <strong>no es profesional o no existe realmente</strong>.
+      </div>
+      <div class="emotion-quote">
+        "Si no me muestran un catálogo, un antes y después, un video de una casa real donde esto funcione… yo no me meto. Así de simple." — Inspirado en Yumarli, Carlos y William
+      </div>
+    </div>
+    <div class="success-card">
+      <div class="section-title"><div class="icon" style="background:#E8F5E9;">😊</div> El Éxito</div>
+      <div class="emotion-text">
+        Cristina encuentra una página web con <strong>videos de hogares colombianos reales</strong> donde ya funciona la domótica. Ve un antes y después, entiende qué hace cada dispositivo con explicaciones cortas y claras, lee testimonios de otros propietarios y descubre que <strong>el servicio incluye instalación, soporte y no requiere mensualidades</strong>. Siente control y certeza. Le muestra la página a su esposo, su hijo valida la tecnología, y entre los tres deciden <strong>pedir una cotización por WhatsApp</strong>.
+      </div>
+      <div class="emotion-quote">
+        Se siente tranquila, informada y en control. Sabe qué está comprando, por qué lo necesita y confía en que el proveedor es profesional. La decisión fue familiar, gradual y respaldada por evidencia real.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <div class="footer-text">Fuente: 15 entrevistas semiestructuradas · Propietarios colombianos, ingresos medio-altos, 30–55 años · Universidad EAFIT · Febrero 2026</div>
+  <div class="footer-brand">i-H<span>o</span>motic · Sustainable & Efficient</div>
+</footer>
+
+</body>
+</html>

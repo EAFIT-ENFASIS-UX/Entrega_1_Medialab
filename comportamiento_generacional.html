@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comportamiento Generacional — i-Homotic</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700&family=Playfair+Display:ital,wght@0,700;1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-dark: #2D6A2E; --green-light: #4CAF50; --green-pale: #E8F5E9;
+    --orange: #E8721A; --dark: #1B2A1B;
+    --gray-900: #212121; --gray-700: #424242; --gray-500: #757575;
+    --gray-300: #E0E0E0; --gray-100: #F5F5F5; --white: #FFFFFF;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--gray-100); color: var(--gray-900); }
+
+  .header {
+    background: linear-gradient(135deg, var(--dark) 0%, var(--green-dark) 100%);
+    padding: 24px 36px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+  }
+  .header-left { display: flex; align-items: center; gap: 18px; }
+  .logo-mark {
+    width: 46px; height: 46px; background: var(--green-light); border-radius: 11px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 20px; color: var(--white); position: relative;
+  }
+  .logo-mark::after { content: ''; position: absolute; top: -4px; right: -4px; width: 13px; height: 13px; background: var(--orange); border-radius: 50%; }
+  .header-title { color: var(--white); font-size: 21px; font-weight: 700; }
+  .header-title span { color: var(--orange); }
+  .header-subtitle { color: rgba(255,255,255,0.6); font-size: 12.5px; margin-top: 2px; }
+  .header-badge { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 7px 16px; color: rgba(255,255,255,0.8); font-size: 12px; }
+
+  .content-area { max-width: 1100px; margin: 0 auto; padding: 32px 24px 48px; }
+
+  /* HERO SECTION */
+  .gen-hero {
+    border-radius: 20px; overflow: hidden; margin-bottom: 32px;
+    background: linear-gradient(135deg, #1B2A1B 0%, #2D6A2E 50%, #4CAF50 100%);
+    color: var(--white); padding: 48px 40px; position: relative;
+  }
+  .gen-hero::before {
+    content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 40%;
+    background: radial-gradient(circle at 70% 50%, rgba(232,114,26,0.15), transparent 70%);
+  }
+  .gen-label {
+    display: inline-block; padding: 5px 14px; border-radius: 20px; margin-bottom: 16px;
+    background: rgba(255,255,255,0.15); font-size: 12px; font-weight: 700;
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  .gen-name { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 700; margin-bottom: 8px; position: relative; z-index: 1; }
+  .gen-name em { color: var(--orange); font-style: normal; }
+  .gen-subtitle { font-size: 15px; opacity: 0.85; margin-bottom: 24px; max-width: 600px; line-height: 1.5; position: relative; z-index: 1; }
+  .gen-range {
+    display: inline-flex; gap: 20px; padding: 12px 20px; border-radius: 12px;
+    background: rgba(255,255,255,0.1); backdrop-filter: blur(4px);
+    font-size: 13px; position: relative; z-index: 1;
+  }
+  .gen-range strong { color: var(--orange); }
+
+  /* DESCRIPTION BLOCK */
+  .gen-desc-section {
+    background: var(--white); border-radius: 16px; padding: 32px; margin-bottom: 28px;
+    border: 1px solid var(--gray-300);
+  }
+  .section-title {
+    font-size: 16px; font-weight: 700; color: var(--green-dark); margin-bottom: 18px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-title .icon {
+    width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 17px;
+  }
+  .gen-description {
+    font-size: 15px; color: var(--gray-700); line-height: 1.75; columns: 2; column-gap: 32px;
+  }
+  .gen-description p { margin-bottom: 14px; break-inside: avoid; }
+  .gen-description strong { color: var(--gray-900); }
+
+  /* CULTURAL DRIVERS */
+  .drivers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
+  .driver-card {
+    background: var(--white); border-radius: 14px; padding: 22px 20px;
+    border: 1px solid var(--gray-300); text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .driver-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+  .driver-emoji { font-size: 32px; margin-bottom: 10px; }
+  .driver-name { font-size: 14px; font-weight: 700; color: var(--green-dark); margin-bottom: 6px; }
+  .driver-desc { font-size: 12.5px; color: var(--gray-500); line-height: 1.5; }
+
+  /* PORTFOLIO OF MEANINGS */
+  .meanings-section {
+    background: var(--white); border-radius: 16px; padding: 32px; margin-bottom: 28px;
+    border: 1px solid var(--gray-300);
+  }
+  .meanings-subtitle {
+    font-size: 13px; color: var(--gray-500); line-height: 1.5; margin-bottom: 24px; max-width: 750px;
+  }
+  .meanings-cloud {
+    display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+    padding: 24px; background: linear-gradient(135deg, #F9FBF9, #F0F5F0); border-radius: 14px;
+  }
+  .meaning-tag {
+    padding: 8px 18px; border-radius: 24px; font-weight: 600;
+    transition: transform 0.2s, box-shadow 0.2s; cursor: default;
+  }
+  .meaning-tag:hover { transform: scale(1.05); box-shadow: 0 3px 12px rgba(0,0,0,0.1); }
+  .meaning-tag.lg { font-size: 18px; }
+  .meaning-tag.md { font-size: 15px; }
+  .meaning-tag.sm { font-size: 13px; }
+  .mt-green { background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7; }
+  .mt-blue { background: #E3F2FD; color: #1565C0; border: 1px solid #90CAF9; }
+  .mt-orange { background: #FFF3E0; color: #E65100; border: 1px solid #FFCC80; }
+  .mt-purple { background: #F3E5F5; color: #7B1FA2; border: 1px solid #CE93D8; }
+  .mt-teal { background: #E0F2F1; color: #00695C; border: 1px solid #80CBC4; }
+
+  /* DESIGN IMPLICATIONS */
+  .implications-section {
+    background: var(--white); border-radius: 16px; padding: 32px; margin-bottom: 28px;
+    border: 1px solid var(--gray-300);
+  }
+  .impl-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .impl-card {
+    border-radius: 12px; padding: 18px 20px; border-left: 4px solid;
+  }
+  .impl-card:nth-child(1) { background: #E8F5E9; border-color: #4CAF50; }
+  .impl-card:nth-child(2) { background: #E3F2FD; border-color: #42A5F5; }
+  .impl-card:nth-child(3) { background: #FFF3E0; border-color: #FFA726; }
+  .impl-card:nth-child(4) { background: #F3E5F5; border-color: #AB47BC; }
+  .impl-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray-500); margin-bottom: 4px; }
+  .impl-text { font-size: 13.5px; color: var(--gray-700); line-height: 1.5; }
+  .impl-text strong { color: var(--gray-900); }
+
+  .footer {
+    background: var(--dark); padding: 18px 36px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+  }
+  .footer-text { color: rgba(255,255,255,0.45); font-size: 11px; }
+  .footer-brand { color: rgba(255,255,255,0.65); font-size: 12px; font-weight: 600; }
+  .footer-brand span { color: var(--orange); }
+
+  @media (max-width: 900px) {
+    .gen-description { columns: 1; }
+    .drivers-grid { grid-template-columns: 1fr; }
+    .impl-grid { grid-template-columns: 1fr; }
+    .header, .footer { padding-left: 18px; padding-right: 18px; }
+    .content-area { padding: 20px 16px 40px; }
+    .gen-hero { padding: 28px 20px; }
+    .gen-name { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-left">
+    <div class="logo-mark">iH</div>
+    <div>
+      <div class="header-title">Comportamiento Generacional<span> · </span>i-Homotic</div>
+      <div class="header-subtitle">Investigación de usuario · Diseño de Interacción · EAFIT 2026</div>
+    </div>
+  </div>
+  <div class="header-badge">Derivado de 15 entrevistas · Arquetipo "El Explorador Informado"</div>
+</header>
+
+<div class="content-area">
+
+  <!-- ═══════ HERO ═══════ -->
+  <div class="gen-hero">
+    <div class="gen-label">Comportamiento Generacional</div>
+    <div class="gen-name">El Nido <em>Conectado</em></div>
+    <div class="gen-subtitle">Hombres y mujeres que construyen su hogar como un proyecto de vida en constante evolución. No buscan la casa más lujosa — buscan la casa más inteligente dentro de sus posibilidades. Investigan, comparan y avanzan a su ritmo, mezclando la prudencia de quien ya ha sido engañado con la curiosidad de quien sabe que la tecnología puede mejorar su día a día.</div>
+    <div class="gen-range">
+      <span><strong>Rango:</strong> 30–55 años</span>
+      <span><strong>Generación:</strong> Millennials tardíos a Gen X</span>
+      <span><strong>Contexto:</strong> Colombia urbana, ingresos medio-altos</span>
+    </div>
+  </div>
+
+  <!-- ═══════ DESCRIPCIÓN ═══════ -->
+  <div class="gen-desc-section">
+    <div class="section-title"><div class="icon" style="background:#E8F5E9;">📝</div> Descripción del comportamiento</div>
+    <div class="gen-description">
+      <p>Son <strong>profesionales activos con vida familiar</strong>, propietarios de un apartamento o casa en zona urbana que consideran su refugio. Crecieron en una Colombia donde contratar un servicio para el hogar era un acto de fe — dependía del voz a voz y la suerte. Esa experiencia los formó como <strong>consumidores cautelosos</strong>, pero no cerrados: <strong>están dispuestos a probar lo nuevo, siempre que alguien les demuestre que funciona</strong>.</p>
+
+      <p>Son la primera generación colombiana donde <strong>los hijos les enseñan tecnología a los padres</strong>. ChatGPT, apps de domótica, tutoriales de YouTube — los aprenden de sus hijos universitarios o adolescentes. Lejos de avergonzarse, lo asumen con naturalidad: la familia es su red de aprendizaje tecnológico.</p>
+
+      <p>Viven la <strong>dualidad entre lo análogo y lo digital</strong>. Buscan proveedores por voz a voz, pero validan en Google. Compran materiales en Homecenter, pero revisan precios en Amazon. Coordinan con el maestro de obra por WhatsApp, pero ven tutoriales de YouTube antes de opinar. No son nativos digitales puros, pero tampoco son análogos — son <strong>migrantes digitales funcionales</strong> que adaptan las herramientas a su estilo.</p>
+
+      <p>Su relación con el hogar es <strong>profundamente emocional y familiar</strong>. Las decisiones de mejora se toman en pareja: uno elige lo estético, el otro gestiona el presupuesto. Los hijos opinan sobre tecnología. Es un proceso de consenso donde cada peso invertido debe justificarse ante toda la familia.</p>
+
+      <p>Valoran la <strong>transparencia por encima del precio</strong>. Prefieren pagar más a alguien que les muestre exactamente qué va a hacer, cuánto va a costar y cuánto va a tardar — porque la peor experiencia no es que sea caro, sino que no sea lo que prometieron. Los incumplimientos pasados los volvieron <strong>escépticos constructivos</strong>: no desconfían de todo, pero exigen pruebas.</p>
+
+      <p>Adoptan la tecnología de <strong>forma gradual y condicional</strong>. Empiezan con un Alexa, luego un bombillo inteligente, después una cámara. Cada pieza nueva debe demostrar su valor antes de agregar la siguiente. No compran un sistema completo de domótica de golpe — construyen su ecosistema paso a paso, como quien arma un rompecabezas donde cada pieza debe encajar con las anteriores.</p>
+
+      <p>Su fuente de inspiración es <strong>visual y concreta</strong>. Un antes/después los convence más que un brochure. Un video de una casa real les dice más que diez párrafos técnicos. Navegan Instagram y Pinterest no para comprar, sino para soñar — y cuando ese sueño se conecta con un proveedor que les muestra evidencia creíble, están listos para dar el paso.</p>
+    </div>
+  </div>
+
+  <!-- ═══════ MOTORES CULTURALES ═══════ -->
+  <div class="gen-desc-section">
+    <div class="section-title"><div class="icon" style="background:#FFF3E0;">⚡</div> Motores Culturales</div>
+  </div>
+  <div class="drivers-grid">
+    <div class="driver-card">
+      <div class="driver-emoji">🏠</div>
+      <div class="driver-name">El hogar como proyecto de vida</div>
+      <div class="driver-desc">El hogar no es un inmueble — es la manifestación física de lo que han construido como familia. Cada mejora es un acto de cuidado y cada inversión debe proteger ese refugio.</div>
+    </div>
+    <div class="driver-card">
+      <div class="driver-emoji">🔍</div>
+      <div class="driver-name">Investigar antes de actuar</div>
+      <div class="driver-desc">La confianza no se regala — se construye con evidencia. Buscar, comparar, leer reseñas y ver videos no es desconfianza, es responsabilidad. Actuar sin información es imprudencia.</div>
+    </div>
+    <div class="driver-card">
+      <div class="driver-emoji">👨‍👩‍👧‍👦</div>
+      <div class="driver-name">La familia como red de decisión</div>
+      <div class="driver-desc">Las decisiones del hogar son colectivas. Los hijos aportan conocimiento tecnológico, la pareja equilibra estética y presupuesto. Nadie decide solo — el consenso es la regla.</div>
+    </div>
+    <div class="driver-card">
+      <div class="driver-emoji">📱</div>
+      <div class="driver-name">Migración digital funcional</div>
+      <div class="driver-desc">No nacieron digitales, pero migraron con eficiencia. Usan YouTube para aprender, WhatsApp para coordinar, ChatGPT para comparar. La tecnología es herramienta, no identidad.</div>
+    </div>
+    <div class="driver-card">
+      <div class="driver-emoji">🧱</div>
+      <div class="driver-name">Adopción gradual y condicional</div>
+      <div class="driver-desc">Prueban, validan y expanden. Nada se compra en paquete — cada pieza tecnológica debe demostrar su valor antes de sumar la siguiente. El ecosistema se construye, no se compra.</div>
+    </div>
+    <div class="driver-card">
+      <div class="driver-emoji">⚠️</div>
+      <div class="driver-name">Escepticismo constructivo</div>
+      <div class="driver-desc">Las malas experiencias con contratistas los formaron como consumidores exigentes. No rechazan lo nuevo, pero exigen transparencia, cumplimiento y evidencia visual antes de invertir.</div>
+    </div>
+  </div>
+
+  <!-- ═══════ PORTAFOLIO DE SIGNIFICADOS ═══════ -->
+  <div class="meanings-section">
+    <div class="section-title"><div class="icon" style="background:#F3E5F5;">💎</div> Portafolio de Significados</div>
+    <div class="meanings-subtitle">Conceptos clave que definen las preferencias de este grupo generacional. Estos significados deben guiar las decisiones de diseño, comunicación visual y carácter formal de toda la propuesta para i-Homotic.</div>
+    <div class="meanings-cloud">
+      <span class="meaning-tag lg mt-green">Confianza</span>
+      <span class="meaning-tag md mt-blue">Transparencia</span>
+      <span class="meaning-tag lg mt-orange">Evidencia visual</span>
+      <span class="meaning-tag md mt-teal">Seguridad</span>
+      <span class="meaning-tag sm mt-purple">Autonomía</span>
+      <span class="meaning-tag lg mt-green">Gradualidad</span>
+      <span class="meaning-tag md mt-blue">Simplicidad</span>
+      <span class="meaning-tag sm mt-orange">Control</span>
+      <span class="meaning-tag md mt-teal">Familia</span>
+      <span class="meaning-tag lg mt-purple">Claridad</span>
+      <span class="meaning-tag sm mt-green">Honestidad</span>
+      <span class="meaning-tag md mt-blue">Integralidad</span>
+      <span class="meaning-tag sm mt-orange">Pedagogía</span>
+      <span class="meaning-tag lg mt-teal">Verificable</span>
+      <span class="meaning-tag md mt-purple">Accesible</span>
+      <span class="meaning-tag sm mt-green">Moderno</span>
+      <span class="meaning-tag md mt-blue">Práctico</span>
+      <span class="meaning-tag lg mt-orange">Aspiracional</span>
+      <span class="meaning-tag sm mt-teal">Funcional</span>
+      <span class="meaning-tag md mt-green">Progresivo</span>
+      <span class="meaning-tag sm mt-purple">Responsable</span>
+      <span class="meaning-tag md mt-blue">Intuitivo</span>
+      <span class="meaning-tag sm mt-orange">Cercano</span>
+      <span class="meaning-tag lg mt-teal">Eficiente</span>
+    </div>
+  </div>
+
+  <!-- ═══════ IMPLICACIONES DE DISEÑO ═══════ -->
+  <div class="implications-section">
+    <div class="section-title"><div class="icon" style="background:#E3F2FD;">🎨</div> Implicaciones para el diseño</div>
+    <div class="impl-grid">
+      <div class="impl-card">
+        <div class="impl-label">Comunicación</div>
+        <div class="impl-text"><strong>Corta, visual y concreta.</strong> Videos cortos sobre texto largo. Antes/después sobre descripciones técnicas. El usuario aprende con tutoriales de YouTube — la plataforma debe hablar el mismo idioma.</div>
+      </div>
+      <div class="impl-card">
+        <div class="impl-label">Confianza</div>
+        <div class="impl-text"><strong>Evidencia verificable como prioridad.</strong> Testimonios reales, portafolio de proyectos con fotos/videos, trayectoria visible. Sin esto, no hay conversación comercial posible.</div>
+      </div>
+      <div class="impl-card">
+        <div class="impl-label">Navegación</div>
+        <div class="impl-text"><strong>Simple, clara, sin sofisticación excesiva.</strong> El usuario valora la simplicidad. Interfaces limpias que permitan "entrar y quedarse". Iconografía intuitiva sobre menús complejos.</div>
+      </div>
+      <div class="impl-card">
+        <div class="impl-label">Tono</div>
+        <div class="impl-text"><strong>Pedagógico sin ser condescendiente.</strong> Explicar la domótica con cercanía, como quien le cuenta a un amigo. Sin tecnicismos innecesarios, pero sin subestimar la inteligencia del usuario.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <div class="footer-text">Fuente: 15 entrevistas semiestructuradas · Propietarios colombianos, ingresos medio-altos, 30–55 años · Universidad EAFIT · Febrero 2026</div>
+  <div class="footer-brand">i-H<span>o</span>motic · Sustainable & Efficient</div>
+</footer>
+
+</body>
+</html>
