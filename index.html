@@ -185,6 +185,20 @@
   .card-purple .card-tag { background: #EDE7F6; color: #4527A0; }
   .card-purple .card-btn { background: #512DA8; color: white; }
 
+  /* ── BACK TO TOP ── */
+  .back-to-top {
+    position: fixed; bottom: 28px; right: 28px; z-index: 200;
+    width: 44px; height: 44px; border-radius: 12px;
+    background: var(--green-dark); color: white; border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s, transform 0.3s;
+    transform: translateY(12px);
+  }
+  .back-to-top.visible { opacity: 1; pointer-events: all; transform: translateY(0); }
+  .back-to-top:hover { background: #1B5E20; transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.25); }
+
   @media (max-width: 720px) {
     .deliverables-grid { grid-template-columns: 1fr; }
     .hero { padding: 40px 24px; }
@@ -214,10 +228,12 @@
   <div class="nav-links">
     <div class="nav-section-label">Navegación</div>
     <a href="index.html" class="nav-link active"><span class="nav-icon">🏠</span> Inicio</a>
-    <a href="user_persona.html" class="nav-link"><span class="nav-icon">👤</span> User Persona</a>
-    <a href="arquetipo_unificado.html" class="nav-link"><span class="nav-icon">🧩</span> Arquetipo Unificado</a>
-    <a href="comportamiento_generacional.html" class="nav-link"><span class="nav-icon">📊</span> Comportamiento Generacional</a>
+    <a href="protopersona.html" class="nav-link"><span class="nav-icon">🧑‍⚕️</span> Proto-persona</a>
+    <a href="entrevistas.html" class="nav-link"><span class="nav-icon">🎙️</span> Entrevistas</a>
     <a href="mapa_empatia.html" class="nav-link"><span class="nav-icon">🗺️</span> Mapa de Empatía</a>
+    <a href="arquetipo_unificado.html" class="nav-link"><span class="nav-icon">🧩</span> Arquetipo Unificado</a>
+    <a href="user_persona.html" class="nav-link"><span class="nav-icon">👤</span> User Persona</a>
+    <a href="comportamiento_generacional.html" class="nav-link"><span class="nav-icon">📊</span> Comportamiento Generacional</a>
   </div>
   <div class="nav-footer">
     <div class="nav-footer-text"><strong>i-Homotic UX Research</strong><br>Entrega 1 · Medialab · EAFIT 2026</div>
@@ -249,7 +265,7 @@
         <span>Entrevistas</span>
       </div>
       <div class="hero-stat">
-        <strong>4</strong>
+        <strong>6</strong>
         <span>Entregables</span>
       </div>
       <div class="hero-stat">
@@ -293,30 +309,68 @@
 
   <div class="deliverables-grid">
 
-    <!-- 01 · User Persona -->
+    <!-- 01 · Proto-persona -->
     <div class="deliverable-card card-green">
       <div class="card-top">
-        <div class="card-icon">👤</div>
+        <div class="card-icon">🧑‍⚕️</div>
         <div class="card-number">Entregable 01</div>
-        <div class="card-title">User Persona</div>
-        <p class="card-desc">Perfil detallado del usuario objetivo: Andrés, "El Explorador Informado". Demográficos, motivaciones, frustraciones, metas y comportamientos digitales ante la automatización del hogar.</p>
+        <div class="card-title">Proto-persona</div>
+        <p class="card-desc">Perfil hipotético de Armando Castillo, cirujano plástico de 48 años en Llanogrande, Antioquia. Incluye comportamiento, cultura, necesidades, metas, fricciones y dolores previos a la investigación.</p>
       </div>
       <div class="card-tags">
-        <span class="card-tag">Perfil de usuario</span>
-        <span class="card-tag">Goals & Pains</span>
-        <span class="card-tag">Comportamiento digital</span>
+        <span class="card-tag">Proto-persona</span>
+        <span class="card-tag">Hipótesis</span>
+        <span class="card-tag">Pre-investigación</span>
       </div>
       <div class="card-footer">
-        <span class="card-meta">Basado en 15 entrevistas</span>
-        <a href="user_persona.html" class="card-btn">Ver entregable <span class="arrow">→</span></a>
+        <span class="card-meta">Perfil hipotético</span>
+        <a href="protopersona.html" class="card-btn">Ver entregable <span class="arrow">→</span></a>
       </div>
     </div>
 
-    <!-- 02 · Arquetipo Unificado -->
+    <!-- 02 · Entrevistas -->
     <div class="deliverable-card card-orange">
       <div class="card-top">
-        <div class="card-icon">🧩</div>
+        <div class="card-icon">🎙️</div>
         <div class="card-number">Entregable 02</div>
+        <div class="card-title">Entrevistas</div>
+        <p class="card-desc">Cuestionario híbrido conversacional con 11 preguntas semiestructuradas. Incluye acceso a los audios y transcripciones completas de las 15 entrevistas realizadas.</p>
+      </div>
+      <div class="card-tags">
+        <span class="card-tag">Cuestionario</span>
+        <span class="card-tag">Audios</span>
+        <span class="card-tag">Transcripciones</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-meta">15 entrevistas · 20–25 min c/u</span>
+        <a href="entrevistas.html" class="card-btn">Ver entregable <span class="arrow">→</span></a>
+      </div>
+    </div>
+
+    <!-- 03 · Mapa de Empatía -->
+    <div class="deliverable-card card-teal">
+      <div class="card-top">
+        <div class="card-icon">🗺️</div>
+        <div class="card-number">Entregable 03</div>
+        <div class="card-title">Mapa de Empatía</div>
+        <p class="card-desc">Visualización de lo que el usuario piensa, siente, dice y hace respecto a la automatización del hogar. Incluye dolores, ganancias esperadas y motivaciones de fondo.</p>
+      </div>
+      <div class="card-tags">
+        <span class="card-tag">Empatía</span>
+        <span class="card-tag">Piensa & Siente</span>
+        <span class="card-tag">Dice & Hace</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-meta">15 entrevistas · Feb 2026</span>
+        <a href="mapa_empatia.html" class="card-btn">Ver entregable <span class="arrow">→</span></a>
+      </div>
+    </div>
+
+    <!-- 04 · Arquetipo Unificado -->
+    <div class="deliverable-card card-teal">
+      <div class="card-top">
+        <div class="card-icon">🧩</div>
+        <div class="card-number">Entregable 04</div>
         <div class="card-title">Arquetipo Unificado</div>
         <p class="card-desc">Síntesis estratégica de los 15 participantes condensada en un único arquetipo. Incluye dimensiones actitudinales, JTBD y el racional de por qué se consolidan 3 perfiles en uno.</p>
       </div>
@@ -331,11 +385,30 @@
       </div>
     </div>
 
-    <!-- 03 · Comportamiento Generacional -->
-    <div class="deliverable-card card-teal">
+    <!-- 05 · User Persona -->
+    <div class="deliverable-card card-purple">
+      <div class="card-top">
+        <div class="card-icon">👤</div>
+        <div class="card-number">Entregable 05</div>
+        <div class="card-title">User Persona</div>
+        <p class="card-desc">Perfil detallado del usuario objetivo: Andrés, "El Explorador Informado". Demográficos, motivaciones, frustraciones, metas y comportamientos digitales ante la automatización del hogar.</p>
+      </div>
+      <div class="card-tags">
+        <span class="card-tag">Perfil de usuario</span>
+        <span class="card-tag">Goals & Pains</span>
+        <span class="card-tag">Comportamiento digital</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-meta">Basado en 15 entrevistas</span>
+        <a href="user_persona.html" class="card-btn">Ver entregable <span class="arrow">→</span></a>
+      </div>
+    </div>
+
+    <!-- 06 · Comportamiento Generacional -->
+    <div class="deliverable-card card-purple">
       <div class="card-top">
         <div class="card-icon">📊</div>
-        <div class="card-number">Entregable 03</div>
+        <div class="card-number">Entregable 06</div>
         <div class="card-title">Comportamiento Generacional</div>
         <p class="card-desc">Análisis del contexto generacional del arquetipo: influencias culturales, hitos históricos de los Millennials tardíos y cómo moldean su relación con la tecnología del hogar.</p>
       </div>
@@ -349,23 +422,6 @@
         <a href="comportamiento_generacional.html" class="card-btn">Ver entregable <span class="arrow">→</span></a>
       </div>
     </div>
-
-    <!-- 04 · Mapa de Empatía -->
-    <div class="deliverable-card card-purple">
-      <div class="card-top">
-        <div class="card-icon">🗺️</div>
-        <div class="card-number">Entregable 04</div>
-        <div class="card-title">Mapa de Empatía</div>
-        <p class="card-desc">Visualización de lo que el usuario piensa, siente, dice y hace respecto a la automatización del hogar. Incluye dolores, ganancias esperadas y motivaciones de fondo.</p>
-      </div>
-      <div class="card-tags">
-        <span class="card-tag">Empatía</span>
-        <span class="card-tag">Piensa & Siente</span>
-        <span class="card-tag">Dice & Hace</span>
-      </div>
-      <div class="card-footer">
-        <span class="card-meta">15 entrevistas · Feb 2026</span>
-        <a href="mapa_empatia.html" class="card-btn">Ver entregable <span class="arrow">→</span></a>
       </div>
     </div>
 
